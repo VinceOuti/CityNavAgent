@@ -17,12 +17,6 @@ Extensive benchmark experiments show that our method achieves state-of-the-art p
 
 ______________________________________________________________________
 
-## 📢 News
-- **Mar-30-2025**- CityNavAgent dataset/code updated! 🔥
-- **Mar-15-2025**- CityNavAgent dataset released! 🔥
-- **Feb-24-2025**- CityNavAgent repo initialized! 
-______________________________________________________________________
-
 ## AirVLN-E Dataset
 
 The annotations of the enriched AirVLN-E dataset can be downloaded [here](https://drive.google.com/drive/folders/1gfnC64NlrFxotAq3Z5Q_-a_UOIOQ-OCD?usp=sharing). 
