@@ -128,7 +128,6 @@ def semantic_map_grounding(
 
     merged_pc = np.concatenate(pcs, axis=0)
     merged_lm = np.concatenate(lms, axis=0)
-    # print(merged_pc.shape)
 
     if visulization:
         visualize_semantic_point_cloud(merged_pc, merged_lm)
@@ -156,10 +155,8 @@ def explore_pipeline_by_dino(
             if o.strip(" ") not in observed_obj:
                 observed_obj.add(o)
     obs_obj_str = ".".join(list(observed_obj))
-    # print(f"scene caption time: {time.time()-time1}")
     time1 = time.time()
     route_predict_prompt = route_planning_prompt_builder(obs_obj_str, navigation_instruction, landmarks_route[0])
-    # print("################### WARNING: route_planning_prompt_builder use landmark start from 0")
     route_predicted = llm.query_api(route_predict_prompt, show_response=False)
 
     # print(f"query time: {time.time()-time1}")
@@ -209,16 +206,12 @@ def explore_pipeline_by_dino(
         if route_coords[2] > -2:
             route_coords[2] = 2
 
-    #     print(f"next route point: {route_coords}")
-    # print(f"waypoint prediction time:{time.time()-time1}")
-
     time1 = time.time()
     # low level path
     rel_trans = route_coords - cur_pos
     yaw = np.arctan2(rel_trans[1], rel_trans[0])
     new_quat = R.from_euler('z', yaw, degrees=False).as_quat()
-    # new_quat = R.from_quat(rot_quat) * R.from_quat(cur_ori)
-    # new_quat = list(new_quat.as_quat())
+
     new_pos = route_coords
     new_pose = convert_airsim_pose(list(new_pos)+list(new_quat))
 
@@ -291,8 +284,6 @@ def explore_pipeline_by_sam(
     else:
         semantic_pc = np.zeros((1, 3))
 
-    # visualize_point_cloud(semantic_pc)
-
     # route point prediction
     cur_pos = np.array([curr_pose.position.x_val, curr_pose.position.y_val, curr_pose.position.z_val])
     cur_ori = np.array([curr_pose.orientation.x_val, curr_pose.orientation.y_val, curr_pose.orientation.z_val, curr_pose.orientation.w_val])
@@ -313,17 +304,11 @@ def explore_pipeline_by_sam(
         if route_coords[2] > -5:
             route_coords[2] = 5
 
-    #     print(f"next route point: {route_coords}")
-    #
-    # print(f"waypoint prediction time:{time.time()-time1}")
-
     time1 = time.time()
     # low level path
     rel_trans = route_coords - cur_pos
     yaw = np.arctan2(rel_trans[1], rel_trans[0])
     new_quat = R.from_euler('z', yaw, degrees=False).as_quat()
-    # new_quat = R.from_quat(rot_quat) * R.from_quat(cur_ori)
-    # new_quat = list(new_quat.as_quat())
     new_pos = route_coords
     new_pose = convert_airsim_pose(list(new_pos)+list(new_quat))
 
@@ -383,9 +368,6 @@ def CityNavAgent(scene_id, split, data_dir="./data", max_step_size=200, vlm_name
 
     # navigation pipeline
     for i in tqdm(range(len(navi_tasks))):
-        # if i < 20:
-        #     continue
-
         navi_task = navi_tasks[i]
         # load scene info
         episode_id = navi_task['episode_id']
@@ -464,7 +446,6 @@ def CityNavAgent(scene_id, split, data_dir="./data", max_step_size=200, vlm_name
 
             # calculate current position to the graph
             cls_node = find_closest_node(mem_graph._graph, list(curr_pose.position), thresh=20)
-            # print(f"closest node: {cls_node}")
 
             # explore or exploit
             # exploit
@@ -541,7 +522,7 @@ def CityNavAgent(scene_id, split, data_dir="./data", max_step_size=200, vlm_name
                 if next_landmark_idx >= len(landmarks):
                     print(f"Task idx: {i}. Total steps: {step_size}. Exploration finished.")
                     break
-                # print(hist_step_size)
+
                 if len(hist_step_size)>=4 and sum(hist_step_size[-4:-1]) == 0.0:
                     print(f"Task idx: {i}. Total steps: {step_size}. Success: False. Stuck!!")
                     break
@@ -608,9 +589,6 @@ def replay_path(trajectory_files, scene_id, img_type='rgb'):
         meta_data = json.load(f)
 
     for i, traj_info in enumerate(meta_data):
-        if i > 3000:
-            break
-
         # text_instruction = traj_info['instruction']
         episode_id = traj_info['episode_id']
         try:

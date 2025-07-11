@@ -12,7 +12,6 @@ from segment_anything import (
     SamPredictor
 )
 
-import os
 import cv2
 import torch
 import numpy as np
@@ -239,10 +238,7 @@ if __name__ == "__main__":
                             sam_checkpoint_path='weights/sam_vit_h_4b8939.pth',
                             device='cuda')
 
-    # img = cv2.imread("assets/demo9.jpg")
-    # predictor.predict(img, "bear", visualize=True)
-    # predictor.greedy_mask_predict(img, "bear.painting on the wall.dog", visualize=True)
-    img_path = "/media/vincent/Seagate Expansion Drive/airvln/files/traj_obs/3/val_seen/3VELCLL3GTHB2UJSCD7IC4U05DK1F0/obs/front_16.png"
+    img = cv2.imread("assets/demo9.jpg")
+    predictor.predict(img, "bear", visualize=True)
+    predictor.greedy_mask_predict(img, "bear.painting on the wall.dog", visualize=True)
 
-    img = cv2.imread(img_path)
-    predictor.predict(img, "smallest glass building", visualize=True)
