@@ -22,9 +22,9 @@ from utils.maps import build_semantic_map, visualize_semantic_point_cloud, updat
     convert_global_pc, statistical_filter, find_closest_node, compute_shortest_path
 from utils.utils import calculate_movement_steps, append_text_to_image
 
-from external.Grounded_Sam_Lite.groundingdino.util.inference import load_model, predict
-from external.Grounded_Sam_Lite.grounded_sam_api import GroundedSam
-import external.Grounded_Sam_Lite.groundingdino.datasets.transforms as T
+from external.Grounded_Sam.groundingdino.util.inference import load_model, predict
+from external.Grounded_Sam.grounded_sam_api import GroundedSam
+import external.Grounded_Sam.groundingdino.datasets.transforms as T
 
 from external.lm_nav.navigation_graph import NavigationGraph
 from external.lm_nav import pipeline
@@ -359,13 +359,13 @@ def CityNavAgent(scene_id, split, data_dir="./data", max_step_size=200, vlm_name
 
     if vlm_name == "dino":
         vlm = load_model(
-            "external/Grounded_Sam_Lite/groundingdino/config/GroundingDINO_SwinT_OGC.py",
-            "external/Grounded_Sam_Lite/weights/groundingdino_swint_ogc.pth"
+            "external/Grounded_Sam/groundingdino/config/GroundingDINO_SwinT_OGC.py",
+            "external/Grounded_Sam/weights/groundingdino_swint_ogc.pth"
         )
     elif vlm_name == "sam":
         vlm = GroundedSam(
-            dino_checkpoint_path="external/Grounded_Sam_Lite/weights/groundingdino_swint_ogc.pth",
-            sam_checkpoint_path="external/Grounded_Sam_Lite/weights/sam_vit_h_4b8939.pth"
+            dino_checkpoint_path="external/Grounded_Sam/weights/groundingdino_swint_ogc.pth",
+            sam_checkpoint_path="external/Grounded_Sam/weights/sam_vit_h_4b8939.pth"
         )
 
     # load env
@@ -541,7 +541,7 @@ def CityNavAgent(scene_id, split, data_dir="./data", max_step_size=200, vlm_name
                 if next_landmark_idx >= len(landmarks):
                     print(f"Task idx: {i}. Total steps: {step_size}. Exploration finished.")
                     break
-                print(hist_step_size)
+                # print(hist_step_size)
                 if len(hist_step_size)>=4 and sum(hist_step_size[-4:-1]) == 0.0:
                     print(f"Task idx: {i}. Total steps: {step_size}. Success: False. Stuck!!")
                     break
