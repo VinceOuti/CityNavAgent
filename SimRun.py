@@ -347,7 +347,7 @@ def CityNavAgent(scene_id, split, data_dir="./data", max_step_size=200, vlm_name
 
     nav_evaluator = CityNavEvaluator()
 
-    # load LLM0
+    # load LLM
     llm = OpenAI_LLM_v2(
         max_tokens=10000,
         model_name="gpt-4o",
